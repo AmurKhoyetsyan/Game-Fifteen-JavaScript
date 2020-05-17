@@ -1,0 +1,245 @@
+/**
+ * Copyright (c) Amur 2020
+ *
+ * Game Fifteen
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+* {
+    padding: 0;
+    margin: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+.parent {
+    width: 100vw;
+    height: 100vh;
+    background-color: #202C39;
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.title-game,
+.popup-parent .popup-header .header-title,
+.popup-parent .popup-header .header-des,
+.game-parent .start-recordes .item-recordes {
+    width: 300px;
+    padding: 20px 0;
+    font-size: 32px;
+    color: #FFFFFF;
+    font-weight: 700;
+    line-height: 1.7;
+    text-align: center;
+}
+
+.game-parent {
+    width: 300px;
+    position: relative;
+}
+
+.game-parent .moves,
+.game-parent .start-content,
+.game-parent .game-footer,
+.game-parent .start-recordes .item-recordes>span {
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: space-between;
+    justify-content: space-between;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.game-parent .start-content button,
+.game-parent .moves button,
+.popup-parent .popup-body button,
+.game-parent .game-footer button {
+    cursor: pointer;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    color: #FFFFFF;
+    background-color: #4A545E;
+    border: none;
+    padding: 5px;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    transition: all 300ms linear;
+    min-width: 120px;
+}
+
+.game-parent .start-content button:hover,
+.game-parent .start-content button:active,
+.game-parent .start-content button:focus,
+.game-parent .moves button:hover,
+.game-parent .moves button:active,
+.game-parent .moves button:focus,
+.popup-parent .popup-body button:hover,
+.popup-parent .popup-body button:active,
+.popup-parent .popup-body button:focus,
+.game-parent .game-footer button:hover,
+.game-parent .game-footer button:active,
+.game-parent .game-footer button:focus {
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    outline: none;
+}
+
+.game-parent .start-content button:hover,
+.game-parent .moves button:hover,
+.popup-parent .popup-body button:hover,
+.game-parent .game-footer button:hover {
+    background-color: #586E84;
+}
+
+.game-parent .moves,
+.game-parent .game-footer {
+    padding: 10px 5px;
+    width: 100%;
+}
+
+.game-parent .moves .moves-counter {
+    padding: 5px;
+    background-color: #4A545E;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    color: #FFFFFF;
+    text-align: center;
+    min-width: 120px;
+}
+
+.game-parent .item {
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align:center;
+    align-items: center;
+    background-color: #FFA500;
+    box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
+    cursor: pointer;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -ms-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    transition: all 300ms linear;
+    position: absolute;
+    -webkit-border-radius: 10%;
+    -moz-border-radius: 10%;
+    border-radius: 10%;
+    border: 2px solid #202C39;
+}
+
+.game-parent .item.green {
+    background-color: #09FF00;
+}
+
+.game-parent .item::after {
+    content: attr(item-count);
+    color: #FFFFFF;
+    font-weight: 700;
+    line-height: 1.7;
+    font-size: 20px;
+}
+
+.popup-parent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: #00000080;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.popup-parent .popup-header .header-title,
+.popup-parent .popup-header .header-des {
+    font-size: 20px;
+    padding: 10px;
+}
+
+.popup-parent .popup-body {
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: space-between;
+    -ms-flex-pack: space-between;
+    justify-content: space-between;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.game-parent .start-recordes {
+    width: 100%;
+    height: 300px;
+}
+
+.game-parent .start-recordes .item-recordes {
+    width: 100%;
+    padding: 5px 0;
+}
+
+.game-parent .start-recordes .item-recordes>span {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    font-size: 20px;
+    background-color: #4A545E;
+    padding: 0 5px;
+}
+
+.popup-parent .popup-header .header-title,
+.popup-parent .popup-header .header-des {
+    width: 100%;
+}
