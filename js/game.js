@@ -12,8 +12,6 @@
 
     let numbersItems = [];
 
-    let posNumber = [];
-
     let emptyItem, itemCount, cof, top, left, parent, width, height, counter, win, selector;
 
     function init(sel, count = 16) {
@@ -70,7 +68,6 @@
 
         for(let i = 1; i < itemCount; i++) {
             numbersItems.push(i);
-            posNumber.push(i);
         }
 
         emptyItem = Math.random() * itemCount >> 0;
