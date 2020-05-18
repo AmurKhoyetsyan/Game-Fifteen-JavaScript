@@ -156,18 +156,16 @@
             });
             recordes = rec;
             let len = recordes.length;
-            let i = 1;
             let count;
-            while(i < len) {
-                if(recordes[i].count < recordes[i - 1].count){
-                    count = recordes[i - 1];
-                    recordes[i - 1] = recordes[i];
-                    recordes[i] = count;
-                    i -= 2;
+            for(let i = 0; i < len; i++){
+                for(let j = 0; j < len; j++){
+                    if(recordes[i].count < recordes[j].count){
+                        count = recordes[j];
+                        recordes[j] = recordes[i];
+                        recordes[i] = count;
+                    }
                 }
-                i++;
             }
-
             if(len > 5) recordes.length = 5;
         }
 
