@@ -485,10 +485,6 @@
             return;
         }
 
-        counter++;
-        let moves = game.querySelector(".moves-counter");
-        moves.innerText = "Moves " + counter;
-
         let elem = event.target;
         let elemPos = {
             startX: parseFloat(elem.getAttribute("data-left")),
@@ -505,6 +501,9 @@
         };
 
         if(equalPos(elemPos, emptyItemPos)){
+            counter++;
+            let moves = game.querySelector(".moves-counter");
+            moves.innerText = "Moves " + counter;
             let index = elem.getAttribute("data-index");
             elem.setAttribute("data-index", emptyItem);
             elem.setAttribute("data-left", emptyItemPos.startX);
