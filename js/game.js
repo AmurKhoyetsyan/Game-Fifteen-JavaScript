@@ -7,6 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+
 ;(function(game) {
     let positionItems = [];
 
@@ -14,6 +15,10 @@
 
     let emptyItem, itemCount, cof, top, left, parent, width, height, counter, win, selector;
 
+    /**
+     * @param sel
+     * @param count
+     */
     function init(sel, count = 16) {
         selector = sel;
 
@@ -46,9 +51,156 @@
         parent.appendChild(startContent);
     };
 
+    /**
+     * @param items
+     * @param pos
+     * @returns {boolean}
+     */
+    function findItem(items, pos) {
+        for(let item of items) {
+            let itemTop = parseFloat(item.getAttribute('data-top'));
+            let itemLeft = parseFloat(item.getAttribute('data-left'));
+
+            if(parseFloat(pos.top) === itemTop && parseFloat(pos.left) === itemLeft) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param items
+     * @returns {number}
+     */
+    function getEmptyItem(items) {
+        for(let [index, itemPos] of positionItems.entries()) {
+            if(!findItem(items, itemPos)) {
+                return {
+                    index: index,
+                    item: itemPos
+                };
+            }
+        }
+    }
+
+    /**
+     * @param items
+     * @param index
+     * @returns {[]}
+     */
+    function getFreeParticles(items, index) {
+        let cords = positionItems[index];
+
+        let particles = [];
+
+        if(cords.top - top >= 0 && cords.top - top <= height) {
+            particles.push({
+                top: cords.top - top,
+                left: cords.left
+            });
+        }
+
+        if(cords.left - left >= 0 && cords.left - left <= width) {
+            particles.push({
+                top: cords.top,
+                left: cords.left - left
+            });
+        }
+
+        if(cords.top + top >= 0 && cords.top + top <= height) {
+            particles.push({
+                top: cords.top + top,
+                left: cords.left
+            });
+        }
+
+        if(cords.left + left >= 0 && cords.left + left <= width) {
+            particles.push({
+                top: cords.top,
+                left: cords.left + left
+            });
+        }
+
+        return particles;
+    };
+
+    /**
+     * @param items
+     * @param particles
+     * @returns {undefined|*}
+     */
+    function getIndexForStep(items, particles) {
+        let len = particles.length;
+
+        let pos = particles[Math.floor(Math.random() * len)];
+
+        let itemIndex = null;
+
+        for(let [index, item] of items.entries()) {
+
+            let itemTop = parseFloat(item.getAttribute('data-top'));
+            let itemLeft = parseFloat(item.getAttribute('data-left'));
+
+            if(parseFloat(pos.top) === itemTop && parseFloat(pos.left) === itemLeft) {
+                itemIndex = index;
+                return item;
+            }
+        }
+
+        if(itemIndex === null) {
+            return getIndexForStep(items, particles);
+        }
+    }
+
+    /**
+     * @param items
+     */
+    function itemsPositioning(items) {
+        for(let [index, pos] of positionItems.entries()) {
+            for(let item of items) {
+                if(parseFloat(item.getAttribute('data-left')) === parseFloat(pos.left) && parseFloat(item.getAttribute('data-top')) === parseFloat(pos.top)) {
+                    item.setAttribute("data-index", index);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param step
+     * @param steps
+     */
+    function replacePositionItem(step = 0, steps = null) {
+
+        if(steps === null) {
+            steps = Math.round(Math.random() * (300 - 150) + 150);
+        }
+
+        let items = parent.querySelectorAll('.item');
+        let elem = getEmptyItem(items);
+
+        let particles = getFreeParticles(items, elem.index);
+
+        let oneItem = getIndexForStep(items, particles);
+
+        oneItem.setAttribute('data-top', elem.item.top);
+        oneItem.setAttribute('data-left', elem.item.left);
+
+        oneItem.style.top = elem.item.top + "px";
+        oneItem.style.left = elem.item.left + "px";
+        if(step < steps) {
+            replacePositionItem(++step, steps);
+        }else {
+            itemsPositioning(items);
+            emptyItem = getEmptyItem(items).index;
+        }
+    };
+
     function start() {
         counter = 0;
         win = false;
+
+        positionItems = [];
         
         parent.innerHTML = "";
 
@@ -69,8 +221,6 @@
         for(let i = 1; i < itemCount; i++) {
             numbersItems.push(i);
         }
-
-        emptyItem = Math.random() * itemCount >> 0;
 
         let moves = game.createElement("div");
         moves.classList.add("moves");
@@ -93,22 +243,18 @@
         content.style.height = height + "px";
         content.style.position = "relative";
 
-        for(let i = 0; i < itemCount; i++) {
-            if(i === emptyItem) continue;
-            let index = Math.random() * numbersItems.length >> 0;
+        for(let index = 0; index < itemCount - 1; index++) {
             let div = game.createElement("div");
             div.classList.add("item");
+            div.setAttribute("data-left", positionItems[index].left);
+            div.setAttribute("data-top", positionItems[index].top);
             div.setAttribute("item-count", numbersItems[index]);
-            div.setAttribute("data-left", positionItems[i].left);
-            div.setAttribute("data-top", positionItems[i].top);
-            div.setAttribute("data-index", i);
-            div.style.top = positionItems[i].top + "px";
-            div.style.left = positionItems[i].left + "px";
+            div.style.top = positionItems[index].top + "px";
+            div.style.left = positionItems[index].left + "px";
             div.style.width = top + "px";
             div.style.height = left + "px";
-            div.addEventListener("click", replacePosition.bind(this));
+            div.addEventListener("click", replacePosition);
             content.appendChild(div);
-            numbersItems.splice(index, 1);
         }
 
         let gameFooter = game.createElement("div");
@@ -126,7 +272,11 @@
 
         parent.appendChild(moves);
         parent.appendChild(content);
+
+        replacePositionItem();
+
         parent.appendChild(gameFooter);
+
         gameEqual();
 
         win = gameEqualWin();
@@ -313,6 +463,11 @@
         });
     };
 
+    /**
+     * @param elemPos
+     * @param emptyItemPos
+     * @returns {boolean}
+     */
     function equalPos(elemPos, emptyItemPos) {
         if(elemPos.startX === emptyItemPos.startX && elemPos.endX === emptyItemPos.endX && elemPos.startY + top === emptyItemPos.startY) return true;
         if(elemPos.startX === emptyItemPos.startX && elemPos.endX === emptyItemPos.endX && elemPos.startY - top === emptyItemPos.startY) return true;
@@ -321,14 +476,20 @@
 
         return false;
     };
-    
-    function replacePosition(target) {
-        if(win) return;
+
+    /**
+     * @param target
+     */
+    function replacePosition(event) {
+        if(win) {
+            return;
+        }
+
         counter++;
         let moves = game.querySelector(".moves-counter");
         moves.innerText = "Moves " + counter;
 
-        let elem = target.target;
+        let elem = event.target;
         let elemPos = {
             startX: parseFloat(elem.getAttribute("data-left")),
             startY: parseFloat(elem.getAttribute("data-top")),
@@ -361,6 +522,9 @@
         }
     };
 
+    /**
+     * @type {{init: init}}
+     */
     let ArmFifteen = {
         init: init
     };
