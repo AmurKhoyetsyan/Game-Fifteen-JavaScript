@@ -7,13 +7,76 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+ function Timer(elem = null) {
+    this.name = 'Timer';
+    this.sec = 0;
+    this.min = 0;
+    this.hour = 0;
+    this.time = "00:00:00";
+    this.timerStart = null;
+    this.elem = elem;
+
+    this.start = function() {
+        if(this.sec !== 0) {
+            this.min = parseInt(this.sec / 60);
+            this.sec = this.sec - (this.min * 60); 
+        }
+    
+        if(this.min !== 0) {
+            this.hour = parseInt(this.min / 60);
+            this.min = this.min - (this.hour * 60); 
+        }
+    
+        if(this.hour !== 0) {
+            this.day = parseInt(this.min / 24);
+            this.hour = this.hour - (this.day * 24); 
+        }
+    
+        let sec = this.sec > 9 ? this.sec : `0${this.sec}`;
+        let min = this.min > 9 ? this.min : `0${this.min}`;
+        let hour = this.hour > 9 ? this.hour : `0${this.hour}`;
+    
+        this.time = `${hour}:${min}:${sec}`;
+
+        this.sec++;
+
+        if(this.elem !== null) {
+            this.elem.innerText = this.time;
+        }
+
+        console.log(this.time);
+    
+        this.timerStart = setTimeout(() => this.start(), 1000);
+    };
+    
+    this.end = function() {
+        if(this.timerStart !== null) {
+            clearInterval(this.timerStart);
+            this.sec = 0;
+            this.min = 0;
+            this.hour = 0;
+            this.time = "00:00:00";
+            this.timerStart = null;
+        }
+    };
+    
+    this.pause = function() {
+        if(this.timerStart === null) {
+            clearInterval(this.timerStart);
+        }
+    };
+
+    this.get = function() {
+        return this.time;
+    };
+};
 
 ;(function(game) {
     let positionItems = [];
 
     let numbersItems = [];
 
-    let emptyItem, itemCount, cof, top, left, parent, width, height, counter, win, selector;
+    let emptyItem, itemCount, cof, top, left, parent, width, height, counter, win, selector, timer = null;
 
     /**
      * @param sel
@@ -199,6 +262,9 @@
     function start() {
         counter = 0;
         win = false;
+        if(timer !== null) {
+            timer.end();
+        }
 
         positionItems = [];
         
@@ -264,11 +330,20 @@
         btnHome.type = "button";
         btnHome.innerText = "Home";
 
+        let timerShow = game.createElement("span");
+        timerShow.setAttribute('class', 'show-timer');
+
+        timer = new Timer(timerShow);
+
+        timer.start();
+
         btnHome.addEventListener("click", function(e) {
             init(selector, itemCount);
+            timer.end();
         });
 
         gameFooter.appendChild(btnHome);
+        gameFooter.appendChild(timerShow);
 
         parent.appendChild(moves);
         parent.appendChild(content);
@@ -293,6 +368,7 @@
         let dateStr =  date.toLocaleString()
         let rec = [{
                 count: counter,
+                time: timer.get(),
                 dateStr: dateStr
             }
         ];
@@ -302,6 +378,7 @@
             rec = JSON.parse(recordes);
             rec.push({
                 count: counter,
+                time: timer.get(),
                 dateStr: dateStr
             });
             recordes = rec;
@@ -316,7 +393,10 @@
                     }
                 }
             }
-            if(len > 5) recordes.length = 5;
+
+            if(len > 5) {
+                recordes.length = 5;
+            }
         }
 
         storage.setItem("armfifteenrecordes", JSON.stringify(recordes));
@@ -358,15 +438,18 @@
                 itemRecorde.classList.add("item-recordes");
 
                 let recordesText = game.createElement("span");
-                let recordesData= game.createElement("span");
 
+                let recordesData = game.createElement("span");
                 recordesData.innerText = item.dateStr;
 
-                let recordesCount= game.createElement("span");
+                let recordesTime = game.createElement("span");
+                recordesTime.innerText = item.time;
 
+                let recordesCount= game.createElement("span");
                 recordesCount.innerText = item.count;
 
                 recordesText.appendChild(recordesData);
+                recordesText.appendChild(recordesTime);
                 recordesText.appendChild(recordesCount);
 
                 itemRecorde.appendChild(recordesText);
@@ -401,6 +484,7 @@
     };
 
     function winGame() {
+        timer.pause();
         let popupParent = game.createElement("div");
         popupParent.classList.add("popup-parent");
         
@@ -449,6 +533,8 @@
         parent.appendChild(popupParent);
 
         setRecordes();
+
+        timer.end();
     };
 
     function gameEqual() {
