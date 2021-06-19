@@ -368,6 +368,7 @@
         let dateStr =  date.toLocaleString()
         let rec = [{
                 count: counter,
+                time: timer.get(),
                 dateStr: dateStr
             }
         ];
@@ -377,6 +378,7 @@
             rec = JSON.parse(recordes);
             rec.push({
                 count: counter,
+                time: timer.get(),
                 dateStr: dateStr
             });
             recordes = rec;
@@ -391,6 +393,7 @@
                     }
                 }
             }
+
             if(len > 5) {
                 recordes.length = 5;
             }
@@ -435,15 +438,18 @@
                 itemRecorde.classList.add("item-recordes");
 
                 let recordesText = game.createElement("span");
-                let recordesData= game.createElement("span");
 
+                let recordesData = game.createElement("span");
                 recordesData.innerText = item.dateStr;
 
-                let recordesCount= game.createElement("span");
+                let recordesTime = game.createElement("span");
+                recordesTime.innerText = item.time;
 
+                let recordesCount= game.createElement("span");
                 recordesCount.innerText = item.count;
 
                 recordesText.appendChild(recordesData);
+                recordesText.appendChild(recordesTime);
                 recordesText.appendChild(recordesCount);
 
                 itemRecorde.appendChild(recordesText);
@@ -478,6 +484,7 @@
     };
 
     function winGame() {
+        timer.pause();
         let popupParent = game.createElement("div");
         popupParent.classList.add("popup-parent");
         
@@ -526,6 +533,8 @@
         parent.appendChild(popupParent);
 
         setRecordes();
+
+        timer.end();
     };
 
     function gameEqual() {

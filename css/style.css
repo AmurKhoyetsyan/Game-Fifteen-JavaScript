@@ -44,11 +44,16 @@
 .game-parent .start-recordes .item-recordes {
     width: 300px;
     padding: 20px 0;
-    font-size: 32px;
+    font-size: 28px;
     color: #FFFFFF;
     font-weight: 700;
     line-height: 1.7;
     text-align: center;
+}
+
+.game-parent .start-recordes .item-recordes,
+.game-parent .start-recordes .item-recordes * {
+    font-size: 17px;
 }
 
 .game-parent {
