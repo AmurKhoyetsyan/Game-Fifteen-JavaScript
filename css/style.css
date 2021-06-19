@@ -130,7 +130,8 @@
     width: 100%;
 }
 
-.game-parent .moves .moves-counter {
+.game-parent .moves .moves-counter,
+.game-parent .game-footer .show-timer {
     padding: 5px;
     background-color: #4A545E;
     -webkit-border-radius: 10px;
