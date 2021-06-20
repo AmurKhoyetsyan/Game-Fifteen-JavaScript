@@ -17,19 +17,29 @@
     this.elem = elem;
 
     this.start = function() {
+        this.sec++;
         if(this.sec !== 0) {
-            this.min = parseInt(this.sec / 60);
-            this.sec = this.sec - (this.min * 60); 
+            this.min += Math.floor(this.sec / 60);
+        }
+
+        if(this.sec > 59) {
+            this.sec = 0; 
         }
     
         if(this.min !== 0) {
-            this.hour = parseInt(this.min / 60);
-            this.min = this.min - (this.hour * 60); 
+            this.hour += Math.floor(this.min / 60);
+        }
+
+        if(this.min > 59) {
+            this.min = 0; 
         }
     
         if(this.hour !== 0) {
-            this.day = parseInt(this.min / 24);
-            this.hour = this.hour - (this.day * 24); 
+            this.day += Math.floor(this.min / 24);
+        }
+
+        if(this.hour > 24) {
+            this.hour = this.hour - (this.day * 24);  
         }
     
         let sec = this.sec > 9 ? this.sec : `0${this.sec}`;
@@ -38,13 +48,9 @@
     
         this.time = `${hour}:${min}:${sec}`;
 
-        this.sec++;
-
         if(this.elem !== null) {
             this.elem.innerText = this.time;
         }
-
-        console.log(this.time);
     
         this.timerStart = setTimeout(() => this.start(), 1000);
     };
