@@ -27,11 +27,11 @@
      * @type {({file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string})[]}
      */
     let filesAssets = [
-        {name: "of", file: `${window.location.origin}/img/audio_of.svg`},
-        {name: "on", file: `${window.location.origin}/img/audio_on.svg`},
-        {name: "click", file: `${window.location.origin}/audio/click_item.wav`},
-        {name: "clickHeadling", file: `${window.location.origin}/audio/click_headling.wav`},
-        {name: "win", file: `${window.location.origin}/audio/win_game.wav`}
+        {name: "of", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_of.svg'},
+        {name: "on", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_on.svg'},
+        {name: "click", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_item.wav'},
+        {name: "clickHeadling", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_headling.wav'},
+        {name: "win", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/win_game.wav'}
     ];
 
     /**
