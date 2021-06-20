@@ -7,111 +7,104 @@
  * LICENSE file in the root directory of this source tree.
  */
 
- function Timer(elem = null) {
-    this.name = 'Timer';
-    this.sec = 0;
-    this.min = 0;
-    this.hour = 0;
-    this.time = "00:00:00";
-    this.timerStart = null;
-    this.elem = elem;
-
-    this.start = function() {
-        if(this.sec !== 0) {
-            this.min = parseInt(this.sec / 60);
-            this.sec = this.sec - (this.min * 60); 
-        }
-    
-        if(this.min !== 0) {
-            this.hour = parseInt(this.min / 60);
-            this.min = this.min - (this.hour * 60); 
-        }
-    
-        if(this.hour !== 0) {
-            this.day = parseInt(this.min / 24);
-            this.hour = this.hour - (this.day * 24); 
-        }
-    
-        let sec = this.sec > 9 ? this.sec : `0${this.sec}`;
-        let min = this.min > 9 ? this.min : `0${this.min}`;
-        let hour = this.hour > 9 ? this.hour : `0${this.hour}`;
-    
-        this.time = `${hour}:${min}:${sec}`;
-
-        this.sec++;
-
-        if(this.elem !== null) {
-            this.elem.innerText = this.time;
-        }
-
-        console.log(this.time);
-    
-        this.timerStart = setTimeout(() => this.start(), 1000);
-    };
-    
-    this.end = function() {
-        if(this.timerStart !== null) {
-            clearInterval(this.timerStart);
-            this.sec = 0;
-            this.min = 0;
-            this.hour = 0;
-            this.time = "00:00:00";
-            this.timerStart = null;
-        }
-    };
-    
-    this.pause = function() {
-        if(this.timerStart === null) {
-            clearInterval(this.timerStart);
-        }
-    };
-
-    this.get = function() {
-        return this.time;
-    };
-};
-
 ;(function(game) {
+    /**
+     * @type {*[]}
+     */
     let positionItems = [];
 
+    /**
+     * @type {*[]}
+     */
     let numbersItems = [];
 
-    let emptyItem, itemCount, cof, top, left, parent, width, height, counter, win, selector, timer = null;
+    let emptyItem, itemCount, cof, top, left,
+        parent, width, height, counter, win, selector,
+        timer = null, sound = true, audoClick, audioWin, headling, 
+        soundOn, soundOf;
+
+    /**
+     * @type {({file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string})[]}
+     */
+    let filesAssets = [
+        {name: "of", file: `${window.location.origin}/img/audio_of.svg`},
+        {name: "on", file: `${window.location.origin}/img/audio_on.svg`},
+        {name: "click", file: `${window.location.origin}/audio/click_item.wav`},
+        {name: "clickHeadling", file: `${window.location.origin}/audio/click_headling.wav`},
+        {name: "win", file: `${window.location.origin}/audio/win_game.wav`}
+    ];
+
+    /**
+     * @param event
+     */
+    function soundOnOf(event) {
+        sound = !sound;
+        let btn = game.querySelector('.btn-sound-on-of');
+        if(!sound) {
+            btn.innerHTML = soundOn.outerHTML;
+        }else {
+            btn.innerHTML = soundOf.outerHTML;
+        }
+    };
 
     /**
      * @param sel
      * @param count
      */
     function init(sel, count = 16) {
-        selector = sel;
+        Assets.loadFile(filesAssets).then( async res => {
+            audoClick = new Audio(Assets.files.click);
+            audioWin = new Audio(Assets.files.win);
+            headling = new Audio(Assets.files.clickHeadling);
+            soundOn = new Image();
+            soundOn.src = Assets.files.on;
+            soundOf = new Image();
+            soundOf.src = Assets.files.of;
 
-        parent = game.querySelector(selector);
+            selector = sel;
 
-        parent.innerHTML = "";
+            parent = game.querySelector(selector);
 
-        height = width = parent.clientWidth;
+            parent.innerHTML = "";
 
-        itemCount = count;
+            height = width = parent.clientWidth;
 
-        let startContent = game.createElement("div");
-        startContent.classList.add("start-content");
+            itemCount = count;
 
-        let btnStart = game.createElement("button");
-        btnStart.type = "button";
-        btnStart.innerText = "Play";
+            let startContent = game.createElement("div");
+            startContent.classList.add("start-content");
 
-        btnStart.addEventListener("click", start);
+            let btnStart = game.createElement("button");
+            btnStart.type = "button";
+            btnStart.innerText = "Play";
 
-        let btnRecorde= game.createElement("button");
-        btnRecorde.type = "button";
-        btnRecorde.innerText = "Recordes";
+            btnStart.addEventListener("click", start);
 
-        btnRecorde.addEventListener("click", getRecordes);
+            let btnRecorde= game.createElement("button");
+            btnRecorde.type = "button";
+            btnRecorde.innerText = "Recordes";
 
-        startContent.appendChild(btnStart);
-        startContent.appendChild(btnRecorde);
+            btnRecorde.addEventListener("click", getRecordes);
 
-        parent.appendChild(startContent);
+            let btnSound = game.createElement("button");
+            btnSound.type = "button";
+            btnSound.classList.add('btn-sound-on-of');
+            btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
+
+            btnSound.addEventListener('click', soundOnOf);
+
+            startContent.appendChild(btnStart);
+            startContent.appendChild(btnSound);
+            startContent.appendChild(btnRecorde);
+
+            parent.appendChild(startContent);
+
+            let loader = game.querySelector('.parent-loader-game');
+            setTimeout(() => loader.classList.add('hidden'), 1000);
+
+        }).catch(err => {
+            console.log(err);
+        });
     };
 
     /**
@@ -260,6 +253,10 @@
     };
 
     function start() {
+        if(sound) {
+            headling.play();
+        }
+
         counter = 0;
         win = false;
         if(timer !== null) {
@@ -294,7 +291,6 @@
         let movesCounter = game.createElement("span");
         movesCounter.classList.add("moves-counter");
         movesCounter.innerText = "Moves " + counter;
-        moves.appendChild(movesCounter);
 
         let btnStart = game.createElement("button");
         btnStart.type = "button";
@@ -302,6 +298,15 @@
 
         btnStart.addEventListener("click", start);
 
+        let btnSound = game.createElement("button");
+        btnSound.type = "button";
+        btnSound.classList.add('btn-sound-on-of');
+        btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
+
+        btnSound.addEventListener('click', soundOnOf);
+
+        moves.appendChild(movesCounter);
+        moves.appendChild(btnSound);
         moves.appendChild(btnStart);
 
         let content = game.createElement("div");
@@ -338,6 +343,10 @@
         timer.start();
 
         btnHome.addEventListener("click", function(e) {
+            if(sound) {
+                headling.play();
+            }
+            
             init(selector, itemCount);
             timer.end();
         });
@@ -403,6 +412,10 @@
     };
 
     function getRecordes() {
+        if(sound) {
+            headling.play();
+        }
+
         parent.innerHTML = "";
 
         let startContent = game.createElement("div");
@@ -419,6 +432,10 @@
         btnHome.innerText = "Home";
 
         btnHome.addEventListener("click", function(e) {
+            if(sound) {
+                headling.play();
+            }
+
             init(selector, itemCount);
         });
 
@@ -485,6 +502,11 @@
 
     function winGame() {
         timer.pause();
+
+        if(sound) {
+            audioWin.play();
+        }
+
         let popupParent = game.createElement("div");
         popupParent.classList.add("popup-parent");
         
@@ -522,6 +544,10 @@
 
         btnStart.addEventListener("click", start);
         btnHome.addEventListener("click", function(e) {
+            if(sound) {
+                headling.play();
+            }
+
             init(selector, itemCount);
         });
 
@@ -587,6 +613,10 @@
         };
 
         if(equalPos(elemPos, emptyItemPos)){
+            if(sound) {
+                audoClick.play();
+            }
+
             counter++;
             let moves = game.querySelector(".moves-counter");
             moves.innerText = "Moves " + counter;
@@ -614,6 +644,9 @@
         init: init
     };
 
+    /**
+     * @type {{init: init}}
+     */
     window.ArmFifteen = ArmFifteen;
     
 })(document);

@@ -13,7 +13,8 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Game Fifteen</title>
-        <link rel="stylesheet" type="text/css" href="./css/style.css">
+        <link rel="stylesheet" type="text/css" href="./css/loader.min.css" />
+        <link rel="stylesheet" type="text/css" href="./css/style.css" />
     </head>
     <body>
         <div class="parent">
@@ -22,9 +23,13 @@
             </div>
             <div class="game-parent"></div>
         </div>
-        <script type="text/javascript" src="js/game.js"></script>
-        <script type="text/javascript">
-            ArmFifteen.init(".game-parent", 16);
-        </script>
+        <div class="parent-loader-game">
+            <div data-loader="box-rectangular" loader-color="#FFFFFF" title-color="#FFFFFF" title="Game Fifteen" size="50"></div>
+        </div>
+        <script type="text/javascript" src="./js/loader.min.js"></script>
+        <script type="text/javascript" src="./js/timer.js"></script>
+        <script type="text/javascript" src="./js/assets.js"></script>
+        <script type="text/javascript" src="./js/game.js"></script>
+        <script type="text/javascript" src="./js/script.js"></script>
     </body>
 </html>
