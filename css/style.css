@@ -129,6 +129,21 @@
     background-color: #586E84;
 }
 
+.game-parent .moves .btn-sound-on-of,
+.game-parent .start-content .btn-sound-on-of {
+    width: auto;
+    min-width: auto;
+}
+
+.game-parent .moves .btn-sound-on-of img,
+.game-parent .start-content .btn-sound-on-of img {
+    width: 100%;
+    max-width: 20px;
+    display: block;
+    -webkit-filter: invert(1);
+    filter: invert(1);
+}
+
 .game-parent .moves,
 .game-parent .game-footer {
     padding: 10px 5px;
@@ -248,4 +263,31 @@
 .popup-parent .popup-header .header-title,
 .popup-parent .popup-header .header-des {
     width: 100%;
+}
+
+.parent-loader-game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: -webkit-flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #202C39;
+}
+
+.parent-loader-game.hidden {
+    display: none;
 }
