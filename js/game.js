@@ -21,18 +21,18 @@
     let emptyItem, itemCount, cof, top, left,
         parent, width, height, counter, win, selector,
         timer = null, sound = true, audoClick, audioWin, headling, 
-        soundOn, soundOf;
+        soundOn, soundOf, autoLoad = false;
 
     /**
-     * @type {({file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string}|{file: string, name: string})[]}
+     * @type {any[] | string}
      */
-    let filesAssets = [
+    Assets.filesAssets = Assets.filesAssets.concat([
         {name: "of", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_of.svg'},
         {name: "on", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_on.svg'},
         {name: "click", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_item.wav'},
         {name: "clickHeadling", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_headling.wav'},
         {name: "win", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/win_game.wav'}
-    ];
+    ]);
 
     /**
      * @param event
@@ -51,60 +51,81 @@
      * @param sel
      * @param count
      */
+    function initAutoload(sel, count) {
+        audoClick = new Audio(Assets.files.click);
+        audioWin = new Audio(Assets.files.win);
+        headling = new Audio(Assets.files.clickHeadling);
+        soundOn = new Image();
+        soundOn.src = Assets.files.on;
+        soundOf = new Image();
+        soundOf.src = Assets.files.of;
+
+        selector = sel;
+
+        parent = game.querySelector(selector);
+
+        parent.innerHTML = "";
+
+        height = width = parent.clientWidth;
+
+        itemCount = count;
+
+        let startContent = game.createElement("div");
+        startContent.classList.add("start-content");
+
+        let btnStart = game.createElement("button");
+        btnStart.type = "button";
+        btnStart.innerText = "Play";
+
+        btnStart.addEventListener("click", start);
+
+        let btnRecorde= game.createElement("button");
+        btnRecorde.type = "button";
+        btnRecorde.innerText = "Recordes";
+
+        btnRecorde.addEventListener("click", getRecordes);
+
+        let btnSound = game.createElement("button");
+        btnSound.type = "button";
+        btnSound.classList.add('btn-sound-on-of');
+        btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
+
+        btnSound.addEventListener('click', soundOnOf);
+
+        startContent.appendChild(btnStart);
+        startContent.appendChild(btnSound);
+        startContent.appendChild(btnRecorde);
+
+        parent.appendChild(startContent);
+
+        let loader = game.querySelector('.parent-loader-game');
+
+        if(!loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+        }
+    }
+
+    /**
+     * @param sel
+     * @param count
+     */
     function init(sel, count = 16) {
-        Assets.loadFile(filesAssets).then( async res => {
-            audoClick = new Audio(Assets.files.click);
-            audioWin = new Audio(Assets.files.win);
-            headling = new Audio(Assets.files.clickHeadling);
-            soundOn = new Image();
-            soundOn.src = Assets.files.on;
-            soundOf = new Image();
-            soundOf.src = Assets.files.of;
+        let loader = game.querySelector('.parent-loader-game');
 
-            selector = sel;
+        if(loader.classList.contains('hidden')) {
+            loader.classList.remove('hidden');
+        }
 
-            parent = game.querySelector(selector);
-
-            parent.innerHTML = "";
-
-            height = width = parent.clientWidth;
-
-            itemCount = count;
-
-            let startContent = game.createElement("div");
-            startContent.classList.add("start-content");
-
-            let btnStart = game.createElement("button");
-            btnStart.type = "button";
-            btnStart.innerText = "Play";
-
-            btnStart.addEventListener("click", start);
-
-            let btnRecorde= game.createElement("button");
-            btnRecorde.type = "button";
-            btnRecorde.innerText = "Recordes";
-
-            btnRecorde.addEventListener("click", getRecordes);
-
-            let btnSound = game.createElement("button");
-            btnSound.type = "button";
-            btnSound.classList.add('btn-sound-on-of');
-            btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
-
-            btnSound.addEventListener('click', soundOnOf);
-
-            startContent.appendChild(btnStart);
-            startContent.appendChild(btnSound);
-            startContent.appendChild(btnRecorde);
-
-            parent.appendChild(startContent);
-
-            let loader = game.querySelector('.parent-loader-game');
-            setTimeout(() => loader.classList.add('hidden'), 1000);
-
-        }).catch(err => {
-            console.log(err);
-        });
+        if(autoLoad) {
+            initAutoload(sel, count);
+        }else {
+            Assets.loadFile().then( async res => {
+                initAutoload(sel, count);
+                autoLoad = true;
+            }).catch(err => {
+                console.log(err);
+            });
+        }
     };
 
     /**
