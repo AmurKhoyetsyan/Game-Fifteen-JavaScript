@@ -16,20 +16,26 @@ let Assets = {
 
 Assets.files = {},
 
-Assets.loadFile = function(file, count = 0) {
+Assets.filesAssets = [];
+
+/**
+ * @param count
+ * @returns {Promise<unknown>}
+ */
+Assets.loadFile = function(count = 0) {
     return new Promise((resolve, reject) => {
-        fetch(file[count].file).then(function(response) {
+        fetch(Assets.filesAssets[count].file).then(function(response) {
             return response.blob();
         }).then(function(blob) {
             let _self = window.webkitURL || window.URL;
             let objectURL = _self.createObjectURL(blob);
-            Assets.files[file[count].name] = objectURL;
-            count ++;
-            if(file.length > count) {
-                resolve(Assets.loadFile(file, count));
+            Assets.files[Assets.filesAssets[count].name] = objectURL;
+            count++;
+            if(Assets.filesAssets.length > count) {
+                resolve(Assets.loadFile(count));
             }else {
                 resolve(Assets.files);
             }
         }).catch(err => reject(err));
-    });
+    });  
 };
