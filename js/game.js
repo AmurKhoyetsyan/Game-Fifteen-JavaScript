@@ -20,17 +20,24 @@
 
     let emptyItem, itemCount, cof, top, left,
         parent, width, height, counter, win, selector,
-        timer = null, sound = true, audoClick, audioWin, headling, 
+        timer = null, sound = true, audioClick, audioWin, headling, 
         soundOn, soundOf, autoLoad = false;
+
+
+    /**
+     * @type {T[] | string | T[]}
+     */
+    Assets.filesAssets.images = Assets.filesAssets.images.concat([
+        {name: "of", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_of.svg'},
+        {name: "on", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_on.svg'}
+    ]);
 
     /**
      * @type {any[] | string}
      */
-    Assets.filesAssets = Assets.filesAssets.concat([
-        {name: "of", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_of.svg'},
-        {name: "on", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_on.svg'},
+    Assets.filesAssets.audios = Assets.filesAssets.audios.concat([
         {name: "click", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_item.wav'},
-        {name: "clickHeadling", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_headling.wav'},
+        {name: "headling", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_headling.wav'},
         {name: "win", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/win_game.wav'}
     ]);
 
@@ -52,13 +59,13 @@
      * @param count
      */
     function initAutoload(sel, count) {
-        audoClick = new Audio(Assets.files.click);
-        audioWin = new Audio(Assets.files.win);
-        headling = new Audio(Assets.files.clickHeadling);
+        audioClick = Assets.files.audios.click;
+        audioWin = Assets.files.audios.win;
+        headling = Assets.files.audios.headling;
         soundOn = new Image();
-        soundOn.src = Assets.files.on;
+        soundOn.src = Assets.files.images.on;
         soundOf = new Image();
-        soundOf.src = Assets.files.of;
+        soundOf.src = Assets.files.images.of;
 
         selector = sel;
 
@@ -90,7 +97,7 @@
         btnSound.classList.add('btn-sound-on-of');
         btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
 
-        btnSound.addEventListener('click', soundOnOf);
+        btnSound.addEventListener("click", soundOnOf);
 
         startContent.appendChild(btnStart);
         startContent.appendChild(btnSound);
@@ -119,7 +126,7 @@
         if(autoLoad) {
             initAutoload(sel, count);
         }else {
-            Assets.loadFile().then( async res => {
+            Assets.load().then( async res => {
                 initAutoload(sel, count);
                 autoLoad = true;
             }).catch(err => {
@@ -280,6 +287,7 @@
 
         counter = 0;
         win = false;
+
         if(timer !== null) {
             timer.end();
         }
@@ -324,7 +332,7 @@
         btnSound.classList.add('btn-sound-on-of');
         btnSound.innerHTML = sound ? soundOf.outerHTML : soundOn.outerHTML;
 
-        btnSound.addEventListener('click', soundOnOf);
+        btnSound.addEventListener("click", soundOnOf);
 
         moves.appendChild(movesCounter);
         moves.appendChild(btnSound);
@@ -611,11 +619,15 @@
     };
 
     /**
-     * @param target
+     * @param event
      */
     function replacePosition(event) {
         if(win) {
             return;
+        }
+
+        if(sound) {
+            audioClick.play();
         }
 
         let elem = event.target;
@@ -634,10 +646,6 @@
         };
 
         if(equalPos(elemPos, emptyItemPos)){
-            if(sound) {
-                audoClick.play();
-            }
-
             counter++;
             let moves = game.querySelector(".moves-counter");
             moves.innerText = "Moves " + counter;
