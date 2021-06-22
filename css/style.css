@@ -96,11 +96,11 @@
     background-color: #4A545E;
     border: none;
     padding: 5px;
-    -webkit-transition: all 150ms linear;
-    -moz-transition: all 150ms linear;
-    -ms-transition: all 150ms linear;
-    -o-transition: all 150ms linear;
-    transition: all 150ms linear;
+    -webkit-transition: background-color 150ms linear;
+    -moz-transition: background-color 150ms linear;
+    -ms-transition: background-color 150ms linear;
+    -o-transition: background-color 150ms linear;
+    transition: background-color 150ms linear;
     min-width: 120px;
 }
 
@@ -128,6 +128,15 @@
 .popup-parent .popup-body button:hover,
 .game-parent .game-footer button:hover {
     background-color: #586E84;
+}
+
+.game-parent .start-content button:active,
+.game-parent .moves button:active,
+.popup-parent .popup-body button:active,
+.game-parent .game-footer button:active {
+    -webkit-box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
+    -moz-box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
+    box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
 }
 
 .game-parent .moves .btn-sound-on-of,
@@ -180,13 +189,15 @@
     -ms-flex-align:center;
     align-items: center;
     background-color: #FFA500;
+    -webkit-box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
+    -moz-box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
     box-shadow: inset 0 0 10px 5px rgba(0,0,0, 0.4);
     cursor: pointer;
-    -webkit-transition: all 150ms linear;
-    -moz-transition: all 150ms linear;
-    -ms-transition: all 150ms linear;
-    -o-transition: all 150ms linear;
-    transition: all 150ms linear;
+    -webkit-transition: background-color 150ms linear, top 150ms linear, left 150ms linear, bottom 150ms linear, right 150ms linear;
+    -moz-transition: background-color 150ms linear, top 150ms linear, left 150ms linear, bottom 150ms linear, right 150ms linear;
+    -ms-transition: background-color 150ms linear, top 150ms linear, left 150ms linear, bottom 150ms linear, right 150ms linear;
+    -o-transition: background-color 150ms linear, top 150ms linear, left 150ms linear, bottom 150ms linear, right 150ms linear;
+    transition: background-color 150ms linear, top 150ms linear, left 150ms linear, bottom 150ms linear, right 150ms linear;
     position: absolute;
     -webkit-border-radius: 10%;
     -moz-border-radius: 10%;
@@ -204,6 +215,12 @@
     font-weight: 700;
     line-height: 1.7;
     font-size: 20px;
+}
+
+.game-parent .item:active {
+    -webkit-box-shadow: inset 0 0 10px 7px rgba(0,0,0, 0.55);
+    -moz-box-shadow: inset 0 0 10px 7px rgba(0,0,0, 0.55);
+    box-shadow: inset 0 0 10px 7px rgba(0,0,0, 0.55);
 }
 
 .popup-parent {
