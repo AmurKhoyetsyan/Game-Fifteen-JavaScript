@@ -28,17 +28,17 @@
      * @type {T[] | string | T[]}
      */
     Assets.filesAssets.images = Assets.filesAssets.images.concat([
-        {name: "of", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_of.svg'},
-        {name: "on", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/img/audio_on.svg'}
+        {name: "of", file: './img/audio_of.svg'},
+        {name: "on", file: './img/audio_on.svg'}
     ]);
 
     /**
      * @type {any[] | string}
      */
     Assets.filesAssets.audios = Assets.filesAssets.audios.concat([
-        {name: "click", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_item.wav'},
-        {name: "headling", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/click_headling.wav'},
-        {name: "win", file: 'https://raw.githubusercontent.com/AmurKhoyetsyan/Game-Fifteen-JavaScript/31f32d053b3e5619943a01aa654a9c7d3799f07b/audio/win_game.wav'}
+        {name: "click", file: './audio/click_item.wav'},
+        {name: "headling", file: './audio/click_headling.wav'},
+        {name: "win", file: './audio/win_game.wav'}
     ]);
 
     /**
@@ -50,6 +50,7 @@
         if(!sound) {
             btn.innerHTML = soundOn.outerHTML;
         }else {
+            headling.play();
             btn.innerHTML = soundOf.outerHTML;
         }
     };
